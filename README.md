@@ -7,14 +7,23 @@ Cryptocurrency is a complex problem domain for the ML community due to the extre
 - historical dataset train.csv
 
     timestamp: All timestamps are returned as second Unix timestamps (the number of seconds elapsed since 1970-01-01 00:00:00.000 UTC). Timestamps in this dataset are multiple of 60, indicating minute-by-minute data.
+
     Asset_ID: The asset ID corresponding to one of the crytocurrencies (e.g. Asset_ID = 1 for Bitcoin). The mapping from Asset_ID to crypto asset is contained in asset_details.csv.
+
     Count: Total number of trades in the time interval (last minute).
+
     Open: Opening price of the time interval (in USD).
+
     High: Highest price reached during time interval (in USD).
+
     Low: Lowest price reached during time interval (in USD).
+
     Close: Closing price of the time interval (in USD).
+
     Volume: Quantity of asset bought or sold, displayed in base currency USD.
+
     VWAP: The average price of the asset over the time interval, weighted by volume. VWAP is an aggregated form of trade data.
+    
     Target: Residual log-returns for the asset over a 15 minute horizon.
 
 - need to complete time-series data (there are many gaps)
@@ -38,6 +47,7 @@ A stationary behaviour of a system or a process is characterized by non-changing
 "While mean squared error, R^2, explained variance, and correlation are all very closely related, correlation has the useful property that it tends to normalize leading-order volatility out of the covariance between target and prediction. In financial markets (especially crypto ones!), predicting volatility is a difficult (but interesting!) question in its own right. By using correlation as a metric we hope to remove some noise from the prediction problem and provide a more stable metric to evaluate against."
 
 ## Challenges and Tasks
+- Finish [tutorial](https://www.kaggle.com/cstein06/tutorial-to-the-g-research-crypto-competition)
 - reproduce target column: completed, see playground.py
 - evaluation metric of the competition: check hosts [notebook](https://www.kaggle.com/c/g-research-crypto-forecasting/discussion/291845)
 - high but variable correlation between the assets. Q: how to perform forecasts in a highly non-stationary environment?
