@@ -21,7 +21,7 @@ Cryptocurrency is a complex problem domain for the ML community due to the extre
 
 - what do we predict here?
 
-    Log returns
+    Log returns (linearly residualized for each asset - idea is to see how good is the foreast on each asset separately).
 
     In order to analyze price changes for an asset we can deal with the price difference. However, different assets exhibit different price scales, so that the their returns are not readily comparable. We can solve this problem by computing the percentage change in price instead, also known as the return. This return coincides with the percentage change in our invested capital.
 
