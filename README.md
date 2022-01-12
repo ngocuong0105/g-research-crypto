@@ -33,6 +33,10 @@ A stationary behaviour of a system or a process is characterized by non-changing
 - crypto asset returns are highly correlated, following to a large extend the overall crypto market. 
 
 - data is highly non-stationary, these results might vary a lot for different periods. Use cross-validation to avoid overfitting.
+
+- why evaluation metrics is correlation between prediction and actual?
+"While mean squared error, R^2, explained variance, and correlation are all very closely related, correlation has the useful property that it tends to normalize leading-order volatility out of the covariance between target and prediction. In financial markets (especially crypto ones!), predicting volatility is a difficult (but interesting!) question in its own right. By using correlation as a metric we hope to remove some noise from the prediction problem and provide a more stable metric to evaluate against."
+
 ## Challenges and Tasks
 - reproduce target column: completed, see playground.py
 - evaluation metric of the competition: check hosts [notebook](https://www.kaggle.com/c/g-research-crypto-forecasting/discussion/291845)
