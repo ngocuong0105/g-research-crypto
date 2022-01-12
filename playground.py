@@ -116,3 +116,23 @@ prices.columns = [f"A{a}" for a in range(14)]
 prices = prices.reindex(range(prices.index[0], prices.index[-1]+60,60), method='pad')
 prices.index = prices.index.map(lambda x: datetime.fromtimestamp(x))
 prices.sort_index(inplace=True)
+
+
+#%%
+# evaluation metric
+def weighted_correlation(actual, pred, weights):
+
+  w = np.ravel(weights)
+  actual = np.ravel(actual)
+  pred = np.ravel(pred)
+
+  sum_w = np.sum(w)
+  mean_actual = np.sum(actual * w) / sum_w
+  mean_pred = np.sum(pred * w) / sum_w
+  var_actual = np.sum(w * np.square(actual - mean_actual)) / sum_w
+  var_pred = np.sum(w * np.square(pred - mean_pred)) / sum_w
+
+  cov = np.sum((actual * pred * w)) / np.sum(w) - mean_actual * mean_pred
+  corr = cov / np.sqrt(var_actual * var_pred)
+
+  return corr

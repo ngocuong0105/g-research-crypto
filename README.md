@@ -33,6 +33,7 @@ A stationary behaviour of a system or a process is characterized by non-changing
 - crypto asset returns are highly correlated, following to a large extend the overall crypto market. 
 
 - data is highly non-stationary, these results might vary a lot for different periods. Use cross-validation to avoid overfitting.
-## Challenges
-
+## Challenges and Tasks
+- reproduce target column: completed, see playground.py
+- evaluation metric of the competition: check hosts [notebook](https://www.kaggle.com/c/g-research-crypto-forecasting/discussion/291845)
 - high but variable correlation between the assets. Q: how to perform forecasts in a highly non-stationary environment?
