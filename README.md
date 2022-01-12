@@ -1,6 +1,6 @@
 ## Crypto currency forecasting challenge.
 
-Cryptocurrency is a complex problem domain for the ML community due to the extreme volatility of the assets, the non-stationary nature of the data, the market and meme manipulation, the correlation between assets and the very fast changing market conditions.
+Cryptocurrency is a complex problem domain for the ML community due to the extreme volatility of the assets, the non-stationary nature of the data, the market and meme manipulation, the correlation between assets and the very fast changing market conditions. Here I record my progress on the G-research forecasting [competition](https://www.kaggle.com/c/g-research-crypto-forecasting/overview). 
 
 ## Notes on the project.
 
