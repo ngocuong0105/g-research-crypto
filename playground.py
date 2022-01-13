@@ -217,7 +217,6 @@ def corr_map(data_complete, assets, timestamp_col = 'timestamp', start='01/01/20
     for asset_id, asset_name in zip(assets.Asset_ID, assets.Asset_Name):
         asset = data_complete[data_complete["Asset_ID"]==asset_id].set_index(timestamp_col)
         asset = asset.loc[totimestamp(start):totimestamp(end)]
-        # asset = asset.reindex(range(asset.index[0], asset.index[-1]+60,60), method='pad')
         lret = pd.DataFrame({f'{asset_name}': log_return(asset.Close)[1:]})
         if it == 0: all_assets = lret
         else: all_assets = pd.concat([all_assets, lret], axis=1)
