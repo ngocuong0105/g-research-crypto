@@ -31,7 +31,10 @@ def ResidualizeMarket(df, mktColumn, window):
 # Function log_return_ahead computes R_t = log(P_{t+16} / P_{t+1})
 # define function to compute log returns
 def log_return(series, periods=1):
-    return np.log(series).diff(periods=periods)
+    return -np.log(series).diff(periods=-periods)
+
+def shifted_return(series, periods=1):
+    return series.shift(periods=-periods-1)/series.shift(periods=-1) - 1
 
 # evaluation metric
 def weighted_correlation(actual, pred, weights):
