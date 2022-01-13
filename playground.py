@@ -196,6 +196,21 @@ def complete_single(df, timestamp_col:str, time_freq:int, method = 'pad'):
 #%%
 targets = compute_targets(data,assets,'Close')
 compare_targets(data,targets,assets)
+plot_candles(data,assets)
+
+
+#%%
+btc = data[data['Asset_ID']==1]
+btc.reset_index(inplace = True,drop=True)
+plot(btc[-1000:], 'Time', ['Open','Close'])
+btc_complete = complete_single(btc, 'timestamp', 60)
+plot(btc_complete[-2000:],'Time',['High','Low','Open'],'BTC')
+
+#%%
+# btc returns
+btc_complete['log_return'] = log_return(btc_complete['Close'],periods=15)
+btc_complete['shifted_return'] = shifted_return(btc_complete['Close'],periods=15)
+plot(btc_complete,'Time',['shifted_return','log_return'])
 #%%
 prices = train.pivot(index=["timestamp"], columns=["Asset_ID"], values=["Close"])
 prices.columns = [f"A{a}" for a in range(14)]
