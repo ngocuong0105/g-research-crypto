@@ -31,7 +31,8 @@ def ResidualizeMarket(df, mktColumn, window):
     return resultRet.drop(columns=[mktColumn]), resultBeta.drop(columns=[mktColumn])
 
 # auxiliary function, from datetime to timestamp
-totimestamp = lambda s: np.int32(time.mktime(datetime.strptime(s, "%d/%m/%Y").timetuple()))
+def totimestamp(s):
+    return np.int32(time.mktime(datetime.strptime(s, "%d/%m/%Y").timetuple()))
 
 # Function log_return_ahead computes R_t = log(P_{t+16} / P_{t+1})
 # define function to compute log returns
