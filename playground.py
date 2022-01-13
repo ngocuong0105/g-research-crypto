@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import seaborn as sns
 #%%
 # Read Data
 data = pd.read_csv("train.csv")
@@ -209,6 +210,24 @@ def complete(data:pd.DataFrame, attribute_cols:'list[str]', timestamp_col:str, t
         dfs.append(df)
     return pd.concat(dfs)
 
+
+def corr_map(data_complete, assets, timestamp_col = 'timestamp', start='01/01/2021', end='01/05/2021'):
+    it = 0
+    all_assets = pd.DataFrame([])
+    for asset_id, asset_name in zip(assets.Asset_ID, assets.Asset_Name):
+        asset = data_complete[data_complete["Asset_ID"]==asset_id].set_index(timestamp_col)
+        asset = asset.loc[totimestamp(start):totimestamp(end)]
+        # asset = asset.reindex(range(asset.index[0], asset.index[-1]+60,60), method='pad')
+        lret = pd.DataFrame({f'{asset_name}': log_return(asset.Close)[1:]})
+        if it == 0: all_assets = lret
+        else: all_assets = pd.concat([all_assets, lret], axis=1)
+        it += 1
+
+    corr_df = all_assets.corr()
+    mask_ut = np.triu(np.ones(corr_df.shape)).astype(np.bool)
+    sns.heatmap(corr_df, mask=mask_ut, cmap="Spectral")
+
+
 #%%
 # reproduce Targets
 targets = compute_targets(data,assets,'Close')
@@ -238,4 +257,5 @@ prices = prices.reindex(range(prices.index[0], prices.index[-1]+60,60), method='
 prices.index = prices.index.map(lambda x: datetime.fromtimestamp(x))
 prices.sort_index(inplace=True)
 
+# %%
 # %%
