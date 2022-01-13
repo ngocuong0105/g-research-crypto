@@ -133,8 +133,9 @@ def plot_candles(data, assets, last_minutes = 5000):
         coin_df.set_index('Time',inplace = True)
         plot_candle(coin_df[-last_minutes:],f'Asset {ids}')
 
-def plot(data, time_col, value_cols, title = '', last_minutes = 5000, line_date = None):
+def plot(data, timestamp_col, value_cols, title = '', last_minutes = 5000, line_date = None):
     data = data[-last_minutes:]
+    data.insert(loc=0, column='Time', value=pd.to_datetime(data[timestamp_col],unit='s'))
     DEFAULT_LAYOUT = dict(
     xaxis=dict(
         type='date',
@@ -183,7 +184,7 @@ def plot(data, time_col, value_cols, title = '', last_minutes = 5000, line_date 
 
     for value_col in value_cols:
         fig.add_scatter(
-            x=data[time_col],
+            x=data['Time'],
             y=data[value_col], 
             name=f'{value_col}'
         )
