@@ -1,4 +1,5 @@
 #%%
+import time
 from datetime import datetime
 import pandas as pd
 import numpy as np
@@ -28,6 +29,9 @@ def ResidualizeMarket(df, mktColumn, window):
     resultBeta = 0.*df + beta.T  #shape beta
 
     return resultRet.drop(columns=[mktColumn]), resultBeta.drop(columns=[mktColumn])
+
+# auxiliary function, from datetime to timestamp
+totimestamp = lambda s: np.int32(time.mktime(datetime.strptime(s, "%d/%m/%Y").timetuple()))
 
 # Function log_return_ahead computes R_t = log(P_{t+16} / P_{t+1})
 # define function to compute log returns
