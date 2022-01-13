@@ -3,6 +3,7 @@ from datetime import datetime
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import plotly.graph_objects as go
 #%%
 # Read Data
 data = pd.read_csv("train.csv")
@@ -10,7 +11,7 @@ assets = pd.read_csv("asset_details.csv")
 data.insert(loc=0, column='Time', value=pd.to_datetime(data['timestamp'],unit='s'))
 data.info(show_counts=True)
 train = data[data['timestamp']<1623542400]
-test = data[data['timestamp']>1623542400]
+test = data[data['timestamp']>=1623542400]
 
 # %%
 # Reproducing the target column
@@ -196,24 +197,34 @@ def complete_single(df, timestamp_col:str, time_freq:int, method = 'pad'):
     df = df.reset_index()
     return df
 
+def complete(data:pd.DataFrame, attribute_cols:'list[str]', timestamp_col:str, time_freq:int) -> pd.DataFrame:
+    dfs = []
+    for _,df in data.groupby(attribute_cols):
+        df = complete_single(df,timestamp_col,time_freq)
+        dfs.append(df)
+    return pd.concat(dfs)
+
 #%%
+# reproduce Targets
 targets = compute_targets(data,assets,'Close')
+asset_times = get_time_range(train,assets)
 compare_targets(data,targets,assets)
-plot_candles(data,assets)
-
-
 #%%
+# Bitcoin example
 btc = data[data['Asset_ID']==1]
 btc.reset_index(inplace = True,drop=True)
 plot(btc[-1000:], 'Time', ['Open','Close'])
 btc_complete = complete_single(btc, 'timestamp', 60)
 plot(btc_complete[-2000:],'Time',['High','Low','Open'],'BTC')
-
-#%%
 # btc returns
 btc_complete['log_return'] = log_return(btc_complete['Close'],periods=15)
 btc_complete['shifted_return'] = shifted_return(btc_complete['Close'],periods=15)
 plot(btc_complete,'Time',['shifted_return','log_return'])
+
+#%%
+data_complete = complete(data,['Asset_ID'],'timestamp',60)
+
+
 #%%
 prices = train.pivot(index=["timestamp"], columns=["Asset_ID"], values=["Close"])
 prices.columns = [f"A{a}" for a in range(14)]
@@ -222,3 +233,4 @@ prices = prices.reindex(range(prices.index[0], prices.index[-1]+60,60), method='
 prices.index = prices.index.map(lambda x: datetime.fromtimestamp(x))
 prices.sort_index(inplace=True)
 
+# %%
