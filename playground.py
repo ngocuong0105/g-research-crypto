@@ -102,6 +102,96 @@ def compare_targets(data,targets,assets):
     print(f'Max absolute error {diffs.max():8.6f}')
     print(f'Standard deviation {diffs.std():8.6f}')
 
+def get_time_range(data, assets):
+    df = pd.DataFrame()
+    mins,maxs = [],[]
+    for ids in assets['Asset_ID']:
+        sub = data[data['Asset_ID']==ids]
+        mins.append(min(sub['Time']))
+        maxs.append(max(sub['Time']))
+    df['Asset_ID'] = assets['Asset_ID']
+    df['Min_date'] = mins
+    df['Max_date'] = maxs
+    return df
+
+def plot_candle(df_coin,title='', last_minutes = 5000):
+    df_coin = df_coin[-last_minutes:]
+    fig = go.Figure(data=[go.Candlestick(
+        x=df_coin.index,
+        open=df_coin['Open'], 
+        high=df_coin['High'], 
+        low=df_coin['Low'], 
+        close=df_coin['Close'])])
+    fig.update_layout(title_text=f'{title}', title_x=0.5)
+    fig.show()
+
+def plot_candles(data, assets, last_minutes = 5000):
+    for ids in assets['Asset_ID']:
+        coin_df = data[data['Asset_ID'] == ids]
+        coin_df.set_index('Time',inplace = True)
+        plot_candle(coin_df[-last_minutes:],f'Asset {ids}')
+
+def plot(data, time_col, value_cols, title = '', last_minutes = 5000):
+    data = data[-last_minutes:]
+    DEFAULT_LAYOUT = dict(
+    xaxis=dict(
+        type='date',
+        rangeselector=dict(
+            buttons=list([
+                dict(count=7,
+                    label='1w',
+                    step='day',
+                    stepmode='backward'),
+                dict(count=1,
+                    label='1m',
+                    step='month',
+                    stepmode='backward'),
+                dict(count=3,
+                    label='3m',
+                    step='month',
+                    stepmode='backward'),
+                dict(count=6,
+                    label='6m',
+                    step='month',
+                    stepmode='backward'),
+                dict(count=1,
+                    label='1y',
+                    step='year',
+                    stepmode='backward'),
+                dict(step='all')
+            ]),
+            bgcolor = '#7792E3',
+            font=dict(
+                color = 'white',
+                size = 13
+            ),
+        ),
+        rangeslider=dict(
+            visible=True
+        ),
+    ),
+    height = 550
+)
+    fig = go.Figure(
+        layout=DEFAULT_LAYOUT
+    )
+    fig.update_layout(title = title)
+    if isinstance(value_cols,str):
+        value_cols = [value_cols]
+
+    for value_col in value_cols:
+        fig.add_scatter(
+            x=data[time_col],
+            y=data[value_col], 
+            name=f'{value_col}'
+        )
+    fig.show()
+
+def complete_single(df, timestamp_col:str, time_freq:int, method = 'pad'):
+    df = df.set_index(timestamp_col)
+    df = df.reindex(range(min(df.index),max(df.index)+time_freq,time_freq),method=method)
+    df = df.reset_index()
+    return df
 
 #%%
 targets = compute_targets(data,assets,'Close')
