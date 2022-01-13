@@ -133,7 +133,7 @@ def plot_candles(data, assets, last_minutes = 5000):
         coin_df.set_index('Time',inplace = True)
         plot_candle(coin_df[-last_minutes:],f'Asset {ids}')
 
-def plot(data, time_col, value_cols, title = '', last_minutes = 5000):
+def plot(data, time_col, value_cols, title = '', last_minutes = 5000, line_date = None):
     data = data[-last_minutes:]
     DEFAULT_LAYOUT = dict(
     xaxis=dict(
@@ -187,6 +187,12 @@ def plot(data, time_col, value_cols, title = '', last_minutes = 5000):
             y=data[value_col], 
             name=f'{value_col}'
         )
+    if line_date:
+        forecast_start = pd.to_datetime(line_date)
+        fig.add_shape(go.layout.Shape(
+                type="line", yref="paper", x0=forecast_start, y0=0, x1=forecast_start, y1=1,
+                line=dict(color="Red", width=1),
+            ))
     fig.show()
 
 def complete_single(df, timestamp_col:str, time_freq:int, method = 'pad'):
