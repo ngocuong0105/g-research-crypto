@@ -235,3 +235,13 @@ def corr_map(data_complete, assets, timestamp_col = 'timestamp', start='01/01/20
     corr_df = all_assets.corr()
     mask_ut = np.triu(np.ones(corr_df.shape)).astype(np.bool)
     sns.heatmap(corr_df, mask=mask_ut, cmap="Spectral")
+
+def makelist(itr):
+    if itr is None:
+        return None
+    if isinstance(itr, str):
+        return [itr]
+    try:
+        return list(itr)
+    except TypeError:
+        return [itr]
