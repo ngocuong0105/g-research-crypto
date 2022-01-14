@@ -133,17 +133,28 @@ def plot_candles(data, assets, last_minutes = 5000):
         coin_df.set_index('Time',inplace = True)
         plot_candle(coin_df[-last_minutes:],f'Asset {ids}')
 
-def plot(data, timestamp_col, value_cols, title = '', last_minutes = 5000, line_date = None):
+def plot(data, timestamp_col, value_cols, title = '', last_minutes = 5000, line_date = None, renderer = 'notebook'):
     data = data[-last_minutes:]
-    data.insert(loc=0, column='Time', value=pd.to_datetime(data[timestamp_col],unit='s'))
+    if timestamp_col in data:
+        data.insert(loc=0, column='t', value=pd.to_datetime(data[timestamp_col],unit='s'))
+    else:
+        data.insert(loc=0, column='t', value=data.index)
     DEFAULT_LAYOUT = dict(
     xaxis=dict(
         type='date',
         rangeselector=dict(
             buttons=list([
-                dict(count=7,
-                    label='1w',
-                    step='day',
+                dict(count=1,
+                    label='1s',
+                    step='second',
+                    stepmode='backward'),
+                dict(count=10,
+                    label='10s',
+                    step='second',
+                    stepmode='backward'),
+                dict(count=1,
+                    label='60s',
+                    step='minute',
                     stepmode='backward'),
                 dict(count=1,
                     label='1m',
@@ -184,7 +195,7 @@ def plot(data, timestamp_col, value_cols, title = '', last_minutes = 5000, line_
 
     for value_col in value_cols:
         fig.add_scatter(
-            x=data['Time'],
+            x=data['t'],
             y=data[value_col], 
             name=f'{value_col}'
         )
@@ -194,7 +205,7 @@ def plot(data, timestamp_col, value_cols, title = '', last_minutes = 5000, line_
                 type="line", yref="paper", x0=forecast_start, y0=0, x1=forecast_start, y1=1,
                 line=dict(color="Red", width=1),
             ))
-    fig.show()
+    fig.show(renderer = renderer)
 
 def complete_single(df, timestamp_col:str, time_freq:int, method = 'pad'):
     df = df.set_index(timestamp_col)
