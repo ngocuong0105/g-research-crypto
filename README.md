@@ -50,9 +50,14 @@ A stationary behaviour of a system or a process is characterized by non-changing
 - why evaluation metrics is correlation between prediction and actual?
 "While mean squared error, R^2, explained variance, and correlation are all very closely related, correlation has the useful property that it tends to normalize leading-order volatility out of the covariance between target and prediction. In financial markets (especially crypto ones!), predicting volatility is a difficult (but interesting!) question in its own right. By using correlation as a metric we hope to remove some noise from the prediction problem and provide a more stable metric to evaluate against."
 
+- Target computation is derived from 'Close' price. Can either forecast target directly or
+forecast 'Close' price.
+
 ## Challenges and Tasks
 - Finish [tutorial](https://www.kaggle.com/cstein06/tutorial-to-the-g-research-crypto-competition) - completed
 - reproduce target column - completed, see playground.py
 - evaluation metric of the competition- completed check hosts [notebook](https://www.kaggle.com/c/g-research-crypto-forecasting/discussion/291845)
 - high but variable correlation between the assets. challenge is to perform forecasts in a highly non-stationary environment. Results may differ a lot on different periods (use CV).
 - create baseline models: Arima, Prophet, Linear regression, Multiregression, VAR, HTS.
+- Linear model in sklearn pipeline
+- Use statsmodels linear model to get the summary and determine significant regressors
