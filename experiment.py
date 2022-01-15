@@ -4,9 +4,6 @@ This file provides an Experiment object containing common methods for forecast e
 import pandas as pd
 import numpy as np
 from utils import totimestamp, log_return, plot, makelist
-from sklearn import linear_model, preprocessing, decomposition, pipeline, feature_selection, impute
-import statsmodels.api as sm
-from sklearn.base import BaseEstimator, RegressorMixin
 from features import FeatureFactory
 
 class Experiment:
