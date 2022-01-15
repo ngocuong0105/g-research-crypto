@@ -34,14 +34,10 @@ class FeatureFactory:
             Xtrain = train[self.feature_cols]
             ytrain = train[self.forecast_col]
             pipe.fit_transform(Xtrain,ytrain)
-            self.data[self.feature_cols] = pd.DataFrame(
-                                            pipe.transform(group[self.feature_cols]),
-                                            index = group[self.feature_cols].index
-                                            )
-            self.data.loc[group.index,self.feature_cols] = pd.DataFrame(
-                                            pipe.transform(group[self.feature_cols]),
-                                            index = group[self.feature_cols].index
-                                            )
+            self.data = pd.DataFrame(
+                        pipe.transform(group[self.feature_cols]),
+                        index = group[self.feature_cols].index
+                        )
 
     def add_log_return_feature(self, col_name:'str', periods:int = 10):
         for _,group in self.data.groupby(self.attribute_cols):
@@ -49,13 +45,13 @@ class FeatureFactory:
 
     def add_rolling_mean(self, col_name:'str', windows:int = 10):
         for _,group in self.data.groupby(self.attribute_cols):
-            self.data.loc[group.index,col_name + '_mean'] = self.X[col_name].shift(windows).rolling(windows).mean().fillna(0)
+            self.data.loc[group.index,col_name + '_mean'] = group[col_name].shift(windows).rolling(windows).mean().fillna(0)
     
     def add_rolling_median(self, col_name:'str', windows:int = 10):
         for _,group in self.data.groupby(self.attribute_cols):
-            self.data.loc[group.index,col_name + '_median'] = self.X[col_name].shift(windows).rolling(windows).median().fillna(0)
+            self.data.loc[group.index,col_name + '_median'] = group[col_name].shift(windows).rolling(windows).median().fillna(0)
     
     def add_rolling_max(self, col_name:'str', windows:int = 10):
         for _,group in self.data.groupby(self.attribute_cols):
-            self.data.loc[group.index,col_name + '_max'] = self.X[col_name].shift(windows).rolling(windows).max().fillna(0)
+            self.data.loc[group.index,col_name + '_max'] = group[col_name].shift(windows).rolling(windows).max().fillna(0)
        
