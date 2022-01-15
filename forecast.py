@@ -34,22 +34,22 @@ experiment = Experiment(
                 )
                 
 # train,test = experiment.get_train_test()
-experiment.factory.clean_features()
 for col in ['Open','High','Low','Close']:
     experiment.factory.add_rolling_max(col)
     experiment.factory.add_rolling_mean(col)
     experiment.factory.add_rolling_median(col)
 
+# experiment.factory.clean_features()
 print(experiment.factory.data)
 
 # %% Linear model per each Asset
-# for ids in assets['Asset_ID']:
-ids = 1
-X_train, X_test, y_train = experiment.get_X_y(Asset_ID = ids)
-factory = FeatureFactory(X_train, X_test, y_train)
-for col in ['Open','High','Low','Close']:
-    factory.add_rolling_max(col)
-    factory.add_rolling_mean(col)
-    factory.add_rolling_median(col)
-factory.standard_feature_prep()
+import statsmodels.api as sm
+for name, group in experiment.factory.data.groupby(attribute_cols):
+    X_train, X_test, y_train = experiment.get_X_y(group)
+    model = sm.OLS(y_train,X_train)
+    results = model.fit()
+    print(name)
+    # print(results.summary())
+    experiment.factory.data['forecast'] = results.predict(pd.concat([X_train, X_test]))
+
 # %%
