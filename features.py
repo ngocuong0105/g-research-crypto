@@ -38,20 +38,23 @@ class FeatureFactory:
                         pipe.transform(group[self.feature_cols]),
                         index = group[self.feature_cols].index
                         )
+            self.feature_cols = self.data.columns
 
     def add_log_return_feature(self, col_name:'str', periods:int = 10):
         for _,group in self.data.groupby(self.attribute_cols):
             self.data.loc[group.index,col_name] = np.log(group[col_name]).diff(periods=periods)
-
+        
     def add_rolling_mean(self, col_name:'str', windows:int = 10):
         for _,group in self.data.groupby(self.attribute_cols):
             self.data.loc[group.index,col_name + '_mean'] = group[col_name].shift(windows).rolling(windows).mean().fillna(0)
-    
+        self.feature_cols.append(col_name + '_mean')
+        
     def add_rolling_median(self, col_name:'str', windows:int = 10):
         for _,group in self.data.groupby(self.attribute_cols):
             self.data.loc[group.index,col_name + '_median'] = group[col_name].shift(windows).rolling(windows).median().fillna(0)
-    
+        self.feature_cols.append(col_name + '_median')
+
     def add_rolling_max(self, col_name:'str', windows:int = 10):
         for _,group in self.data.groupby(self.attribute_cols):
             self.data.loc[group.index,col_name + '_max'] = group[col_name].shift(windows).rolling(windows).max().fillna(0)
-       
+        self.feature_cols.append(col_name + '_median')
