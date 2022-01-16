@@ -61,3 +61,8 @@ forecast 'Close' price.
 - create baseline models: Arima, Prophet, Linear regression, Multiregression, VAR, HTS.
 - Linear model in sklearn pipeline
 - Use statsmodels linear model to get the summary and determine significant regressors
+- impute VWAP nans and inf values (e.g. with linear interpolation)
+- predict other stuff than than the Traget to create new features
+- feature importance
+- Q : model separately differnt assets or cross model?
+- Slavi idea: "aggregate"  data to extract meaningful features
