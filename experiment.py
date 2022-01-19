@@ -17,7 +17,7 @@ class Experiment:
         timestamp_col: str,
         attribute_cols: 'list[str]',
         feature_cols:'list[str]',
-        forecast_col: str,
+        target_col: str,
         ):
         # settings of experiment
         self.history_start = history_start
@@ -26,11 +26,11 @@ class Experiment:
         self.forecast_end = forecast_end
         self.attribute_cols = attribute_cols
         self.feature_cols = feature_cols
-        self.forecast_col = forecast_col
+        self.target_col = target_col
         self.data = self._generate_data(init_data)
         
         # objects of the experiment
-        self.factory = FeatureFactory(self.data ,forecast_start,timestamp_col,attribute_cols,feature_cols,forecast_col)
+        self.factory = FeatureFactory(self.data ,forecast_start,timestamp_col,attribute_cols,feature_cols,target_col)
 
 
     def _generate_data(self, init_data: pd.DataFrame) -> pd.DataFrame:
@@ -62,7 +62,7 @@ class Experiment:
             test = test[test[col].isin(val)]
 
         X_train, X_test = train[self.feature_cols], test[self.feature_cols]
-        y_train = train[self.forecast_col]
+        y_train = train[self.target_col]
         return X_train, X_test, y_train
 
     def compute_metric(self):
