@@ -20,7 +20,6 @@ class Experiment:
         forecast_col: str,
         ):
         # settings of experiment
-        self.init_data = init_data
         self.history_start = history_start
         self.forecast_start = forecast_start
         self.timestamp_col = timestamp_col
@@ -28,9 +27,19 @@ class Experiment:
         self.attribute_cols = attribute_cols
         self.feature_cols = feature_cols
         self.forecast_col = forecast_col
+        self.data = self._generate_data(init_data)
         
         # objects of the experiment
-        self.factory = FeatureFactory(init_data,forecast_start,timestamp_col,attribute_cols,feature_cols,forecast_col)
+        self.factory = FeatureFactory(self.data ,forecast_start,timestamp_col,attribute_cols,feature_cols,forecast_col)
+
+
+    def _generate_data(self, init_data: pd.DataFrame) -> pd.DataFrame:
+        timestamp_col = self.timestamp_col
+        init_data = init_data[
+            (init_data[timestamp_col]>=totimestamp(self.history_start)) &
+            (init_data[timestamp_col]<totimestamp(self.forecast_end))
+            ]
+        return init_data
 
     def get_train_test(self, data: pd.DataFrame):
         timestamp_col = self.timestamp_col
