@@ -41,7 +41,6 @@ class Experiment:
             feature_cols,target_col
             )
 
-
     def _generate_data(self, init_data: pd.DataFrame) -> pd.DataFrame:
         timestamp_col = self.timestamp_col
         init_data = init_data[
