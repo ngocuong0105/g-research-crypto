@@ -5,7 +5,6 @@ Experiments of all forecasting models in one place. Easier for performance compa
 import pandas as pd
 import numpy as np
 from experiment import Experiment
-from features import FeatureFactory 
 
 #%% Configure settings
 data_filename = 'data_complete.csv'
