@@ -14,14 +14,14 @@ class FeatureFactory:
         timestamp_col:str,
         attribute_cols: 'list[str]',
         feature_cols: 'list[str]',
-        forecast_col:str
+        target_col:str
         ) -> None :
         self.data = data
         self.forecast_start = forecast_start
         self.timestamp_col = timestamp_col
         self.attribute_cols = attribute_cols
         self.feature_cols = feature_cols
-        self.forecast_col = forecast_col
+        self.target_col = target_col
 
     def clean_features(self) -> pd.DataFrame:
         for _,group in self.data.groupby(self.attribute_cols):
@@ -32,7 +32,7 @@ class FeatureFactory:
                 ])
             train = group[group[self.timestamp_col]<totimestamp(self.forecast_start)]
             Xtrain = train[self.feature_cols]
-            ytrain = train[self.forecast_col]
+            ytrain = train[self.target_col]
             pipe.fit_transform(Xtrain,ytrain)
             self.data = pd.DataFrame(
                         pipe.transform(group[self.feature_cols]),
