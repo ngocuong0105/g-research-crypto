@@ -2,12 +2,15 @@
 This file provides an Experiment object containing common methods for forecast experiments.
 '''
 import pandas as pd
-import numpy as np
-from utils import totimestamp, log_return, plot, makelist
+from utils import totimestamp, makelist
 from features import FeatureFactory
 
+# pylint: disable=too-many-instance-attributes
 class Experiment:
-
+    '''
+    Experiment class which encapsulates all configurations of a forecasting experiment.
+    '''
+    # pylint: disable=too-many-arguments
     def __init__(
         self,
         init_data: pd.DataFrame,
@@ -28,9 +31,15 @@ class Experiment:
         self.feature_cols = feature_cols
         self.target_col = target_col
         self.data = self._generate_data(init_data)
-        
+
         # objects of the experiment
-        self.factory = FeatureFactory(self.data ,forecast_start,timestamp_col,attribute_cols,feature_cols,target_col)
+        self.factory = FeatureFactory(
+            self.data,
+            forecast_start,
+            timestamp_col,
+            attribute_cols,
+            feature_cols,target_col
+            )
 
 
     def _generate_data(self, init_data: pd.DataFrame) -> pd.DataFrame:
@@ -42,6 +51,9 @@ class Experiment:
         return init_data
 
     def get_train_test(self, data: pd.DataFrame):
+        '''
+        Splits data into train and test set.
+        '''
         timestamp_col = self.timestamp_col
         train = data[
             (data[timestamp_col]>=totimestamp(self.history_start)) &
@@ -53,7 +65,10 @@ class Experiment:
             ]
         return train, test
 
-    def get_X_y(self, data, **attrubute_values):
+    def get_x_y(self, data, **attrubute_values):
+        '''
+        Splits dat into train features, test features and train target values.
+        '''
         train, test = self.get_train_test(data)
         cols = list(attrubute_values.keys())
         vals = [makelist(attrubute_values[col]) for col in cols]
@@ -61,13 +76,19 @@ class Experiment:
             train = train[train[col].isin(val)]
             test = test[test[col].isin(val)]
 
-        X_train, X_test = train[self.feature_cols], test[self.feature_cols]
+        x_train, x_test = train[self.feature_cols], test[self.feature_cols]
         y_train = train[self.target_col]
-        return X_train, X_test, y_train
+        return x_train, x_test, y_train
 
     def compute_metric(self):
-        train,test = self.get_train_test()
+        '''
+        Computes metrics (accuracy/error) of forecast for both train and test set.
+        '''
+        print()
 
     def cross_calidation(self):
+        '''
+        Does cross-validation for the forecast.
+        '''
         print()
     
