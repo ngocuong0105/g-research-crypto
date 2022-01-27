@@ -86,7 +86,6 @@ def compare_targets(data,targets,assets):
     asset_names = list(assets.Asset_Name)
     for i, id in enumerate(ids):
         print(asset_names[i])
-        # type: pd.DataFrame
         asset = data[data.Asset_ID == id].set_index(keys='timestamp')
         print(f'asset size {asset.shape[0]}')
         recreated = pd.Series(index=asset.index, data=targets[asset_names[i]])
